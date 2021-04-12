@@ -1,12 +1,17 @@
 <template>
   <q-page padding>
-    <button @click="counter++">{{ counter }}</button>
+    <button class="counter-button"
+            @click="counter++">{{ counter }}
+    </button>
     <input
       v-model="message"
       @keyup.esc="clearMessage"
       @keyup.enter="alertMessage"
-    />
+      v-autofocus
+      :class="{ 'error' : message.length > 23 }"
+      ref="messageInput" />
     <button @click="clearMessage">Clear</button>
+    <div>{{ message.length }}</div>
     <h5 class="border-grey" v-if="message.length">{{ message }}</h5>
     <h6 v-else>No message entered</h6>
     <hr>
@@ -19,7 +24,7 @@
   export default {
     data() {
       return {
-        message: 'I love Vue so hard.js',
+        message: 'I love Vue.js so hard!',
         counter: 0
       }
     },
@@ -41,12 +46,34 @@
       messageLowercase(value) {
         return value.toLowerCase()
       }
-    }
+    },
+    directives: {
+      autofocus: {
+        inserted(el) {
+          el.focus()
+        }
+      }
+    },
+    mounted() {
+     // console.log(this.$refs)
+      this.$refs.messageInput.className = 'bg-green'
+    },
   }
 </script>
 
 <style lang="scss">
+  .counter-button {
+    position: absolute;
+    right: 20px;
+  }
   .border-grey {
     border: 1px solid grey;
+  }
+  .error {
+    color: red;
+    background: pink;
+  }
+  input, button {
+    font-size: 23px;
   }
 </style>
